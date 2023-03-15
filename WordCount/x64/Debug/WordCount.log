@@ -1,0 +1,3 @@
+﻿  WordCount.cpp
+C:\Users\Vaduk\Desktop\BasedLaba\BasedLaba1\WordCount\WordCount\WordCount.cpp(90,23): warning C4244: =: преобразование "std::streamoff" в "int", возможна потеря данных
+  WordCount.vcxproj -> C:\Users\Vaduk\Desktop\BasedLaba\BasedLaba1\WordCount\x64\Debug\WordCount.exe

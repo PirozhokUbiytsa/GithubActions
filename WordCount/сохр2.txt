@@ -1,0 +1,111 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void LinesCounter(string stroka);
+void WordsCounter(string slovo);
+void BytesCounter(string byte); 
+
+int main(int argc, char* argv[]) {
+	setlocale(LC_ALL, "Russian");
+	vector <string> files;
+	bool if_lines = false, if_words = false, if_bytes = false;
+	for (int i = 1; i < argc; i++) {
+		string argument = argv[i];
+		bool if_command = true;
+		if (argument[0] == '-') {
+			if (argument[1] == '-' && argument.size() == 7) {
+				if (argument.substr(2, 5) == "lines")
+					if_lines = true;
+				else if (argument.substr(2, 5) == "words")
+					if_words = true;
+				else if (argument.substr(2, 5) == "bytes")
+					if_bytes = true;
+				else
+					if_command = false;
+			}
+			else {
+				for (int j = 1; j < argument.size(); j++) {
+					if (argument[j] != 'l' && argument[j] != 'w' && argument[j] != 'c')
+						if_command = false;
+				}
+				if (if_command) {
+					for (int j = 1; j < argument.size(); j++) {
+						if (argument[j] == 'l')
+							if_lines = true;
+						else if (argument[j] == 'w')
+							if_words = true;
+						else if (argument[j] == 'c')
+							if_bytes = true;
+					}
+				}
+			}
+			if (if_command == false)
+				cout << "invalid command was entered: " << argument << '\n';
+		}
+		else
+			files.push_back(argv[i]);
+	}
+	if (!if_lines && !if_words && !if_bytes) {
+		if_lines = true;
+		if_words = true;
+		if_bytes = true;
+	}
+	for (int i = 0; i < files.size(); i++) {
+		ifstream file(files[i]);
+		file.open(files[i]);
+		if (file.is_open()) {
+			if (if_lines)
+				LinesCounter(files[i]);
+			if (if_words)
+				WordsCounter(files[i]);
+			if (if_bytes)
+				BytesCounter(files[i]);
+			cout << " filename: " << files[i] << '\n';
+		}
+		else
+			cout << "file not found: " << files[i] << '\n';
+	}
+}
+void LinesCounter(string line_file) {
+	ifstream file;
+	file.open(line_file);
+	if (file.is_open()) {
+		string str;
+		int l_count = 0;
+		while (!file.eof()) {
+			getline(file, str);
+			l_count++;
+		}
+		file.close();
+		cout << " lines: " << l_count;
+	}
+}
+void WordsCounter(string word_file) {
+	ifstream file;
+	file.open(word_file);
+	if (file.is_open()) {
+		string str;
+		int w_count = 0;
+		while (!file.eof()) {
+			file >> str;
+			w_count++;
+		}
+		file.close();
+		cout << " words: " << w_count;
+	}
+}
+void BytesCounter(string byte_file) {
+	ifstream file;
+	file.open(byte_file);
+	if (file.is_open()) {
+		int b_count = 0;
+		file.seekg(0, ios_base::end);
+		b_count = file.tellg();
+		file.close();
+		cout << " bytes: " << b_count;
+	}
+}
